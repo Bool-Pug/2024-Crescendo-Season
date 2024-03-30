@@ -73,10 +73,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MidMidNoteGoalTwo"
+                  "pathName": "ToMidMidNote"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FromMidMidNote"
           }
         },
         {
