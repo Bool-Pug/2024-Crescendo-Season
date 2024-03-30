@@ -1,14 +1,14 @@
 {
   "conversionFactor": {
-    "drive": 0.047286787200699704,
+    "drive": 0.05032958915,
     "angle": 28.125
   },
   "currentLimit": {
-    "drive": 40,
+    "drive": 45,
     "angle": 20
   },
   "rampRate": {
-    "drive": 0.25,
+    "drive": 0.125,
     "angle": 0.25
   },
   "wheelGripCoefficientOfFriction": 1.19,

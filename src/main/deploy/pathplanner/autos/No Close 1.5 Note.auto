@@ -24,9 +24,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "LowMidNoteExit&Rentry"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LowMidNoteExit&Rentry"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Arm Pickup Pos"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Smart Intake"
+                }
+              }
+            ]
           }
         }
       ]
