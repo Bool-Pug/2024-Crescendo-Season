@@ -119,7 +119,8 @@ public class SignalLights extends SubsystemBase {
     if (ledChanged)
     {
       armLEDs.setData(armLEDBuffer);
-      armLEDs.start();
+      armLEDs.start(); 
+    
     }
   }
 

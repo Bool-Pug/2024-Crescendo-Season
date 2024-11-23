@@ -428,7 +428,7 @@ public void StopIntake() {
 
   public void AmpPreparation () {
     SetArmAngle(ScoringArmConstants.kArmPosAmp);
-    SetLaunchSpeedWithOutake(150);
+    SetLaunchSpeedWithOutake(200);
   }
 
   public void EnableDownAnglePID(){

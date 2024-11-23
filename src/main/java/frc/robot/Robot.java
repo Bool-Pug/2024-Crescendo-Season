@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.setMotorBrake(true);
 
     //Set initial state, will probably get overridden in the selected auto routine
-    m_robotContainer.setInitialPose();
+    //m_robotContainer.setInitialPose();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 

@@ -16,9 +16,10 @@ public class StaticLaunch extends Command {
   Timer noNoteStopDelayTimer;
   Timer launchTimer;
   boolean wasAtSP = false;
+  boolean useVision = false;
 
   /** Creates a new StaticLaunch. */
-  public StaticLaunch(ScoringArm arm,double angle,double speed) {
+  public StaticLaunch(ScoringArm arm,double angle,double speed,boolean tryVision) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_ScoringArm = arm;
     launchAngle = angle;
@@ -26,12 +27,16 @@ public class StaticLaunch extends Command {
     timeoutTimer = new Timer();
     noNoteStopDelayTimer = new Timer();
     launchTimer = new Timer();
+    useVision = tryVision;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ScoringArm.SetArmAngle(launchAngle);
+    if( !(useVision && m_ScoringArm.GetArmAngle() > 5) ){
+      m_ScoringArm.SetArmAngle(launchAngle);
+    }
+    
     m_ScoringArm.SetLaunchSpeed(launchSpeed);
     m_ScoringArm.OutakeToSensorSlow();
 

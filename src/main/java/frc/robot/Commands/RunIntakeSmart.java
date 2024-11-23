@@ -86,7 +86,7 @@ public class RunIntakeSmart extends Command {
       return stopDelayTimer.hasElapsed(1);
     }
     else{
-      return m_ScoringArm.LowIntakeSensorBlocked() || (launchPrepAfter && timeoutTimer.hasElapsed(5));
+      return m_ScoringArm.LowIntakeSensorBlocked() || (launchPrepAfter && timeoutTimer.hasElapsed(8));
       //return m_ScoringArm.LowIntakeSensorBlocked();
     }
 

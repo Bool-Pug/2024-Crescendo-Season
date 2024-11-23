@@ -1,0 +1,142 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.39,
+      "y": 5.54
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Outake Launch Prep"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Near Static Launch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Pickup Pos"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MidToNoteOne"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Smart Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Vision Aim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Far Static Launch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Pickup Pos"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "NoteOneToNoteTwo"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Smart Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Vision Aim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Far Static Launch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Pickup Pos"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "NoteTwoToNoteThree"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Smart Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Vision Aim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Far Static Launch"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

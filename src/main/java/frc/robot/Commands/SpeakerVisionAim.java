@@ -40,6 +40,8 @@ public class SpeakerVisionAim extends Command {
   public double rotationTarget = 0;
   public double pidOutput = 0;
   
+  public boolean inAuto = false;
+  
   public PIDController angleController = new PIDController(0.06, 0, 0);//p: 0.06 i: 0 d: 0
 
   public Timer targetUpdateTimer = new Timer();
@@ -47,7 +49,7 @@ public class SpeakerVisionAim extends Command {
   
   
   /** Creates a new SpeakerVisionAim. */
-  public SpeakerVisionAim(SwerveSubsystem drive, VisionSubsystem vision, FieldDriverStick joystick, ScoringArm arm, SignalLights lights) {
+  public SpeakerVisionAim(SwerveSubsystem drive, VisionSubsystem vision, FieldDriverStick joystick, ScoringArm arm, SignalLights lights, boolean shouldEnd) {
     drivetrain = drive;
     visionSubsystem = vision;
     driverJoystick = joystick;
@@ -56,6 +58,7 @@ public class SpeakerVisionAim extends Command {
     swerveController = drivetrain.getSwerveController();
     angleController.enableContinuousInput(-180, 180);
     angleController.setIntegratorRange(-0.3, 0.3);//0.8
+    inAuto = shouldEnd;
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -158,6 +161,12 @@ public class SpeakerVisionAim extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(inAuto){
+      return angleController.getPositionError() < 5 && scoringArm.atLaunchSetpoint() && scoringArm.ArmAtAngle() && target != null;
+    }
+    else{
+      return false;
+    }
+    
   }
 }

@@ -195,8 +195,9 @@ public class RobotContainer {
     if(ROBOT_IN_USE == Constants.ROBOT_SUPERSONIC_CONFIG_LOCATION){
       NamedCommands.registerCommand("Outake Launch Prep", new OutakeNoteToLaunchPos(m_ScoringArm));
       NamedCommands.registerCommand("Smart Intake", new RunIntakeSmart(m_ScoringArm,m_signalLights,true));
-      NamedCommands.registerCommand("Near Static Launch", new StaticLaunch(m_ScoringArm, ScoringArmConstants.kArmPosNearStaticLaunch, 250));
-      NamedCommands.registerCommand("Far Static Launch", new StaticLaunch(m_ScoringArm, 46.0 , 250));
+      NamedCommands.registerCommand("Near Static Launch", new StaticLaunch(m_ScoringArm, ScoringArmConstants.kArmPosNearStaticLaunch, 250,false));
+      NamedCommands.registerCommand("Far Static Launch", new StaticLaunch(m_ScoringArm, 37 , 250,false));
+      NamedCommands.registerCommand("Vision Aim", new SpeakerVisionAim(drivebase, m_robotVision, m_driveStick, m_ScoringArm, m_signalLights,true));
       NamedCommands.registerCommand("Arm Pickup Pos", new InstantCommand(() -> m_ScoringArm.SetArmAngle(ScoringArmConstants.kArmPosPickup)));
 
     }
@@ -261,9 +262,11 @@ public class RobotContainer {
       new JoystickButton(m_copilotController, 3).whileTrue((new StartEndCommand(() -> m_ScoringArm.AmpPreparation(), () -> m_ScoringArm.CoastLaunchMotors())));
       new JoystickButton(m_copilotController, 4).onTrue(new InstantCommand(() -> m_ScoringArm.SetArmAngle(ScoringArmConstants.kArmPosPickup)));
       new Trigger(() -> (m_copilotController.getRawAxis(3) > 0.5)).whileTrue(new StartEndCommand(() -> m_ScoringArm.SetLaunchSpeedWithOutake(250), () -> m_ScoringArm.CoastLaunchMotors()));
+      //fix the launch speed
       new Trigger(() -> (m_copilotController.getRawAxis(2) > 0.5)).whileTrue(new StartEndCommand(() -> m_ScoringArm.Launch(), ()-> m_ScoringArm.StopIntake()));//
       new JoystickButton(m_copilotController, 8).whileTrue(new ManualArmControl(m_ScoringArm, ()-> ((( -m_copilotController.getRawAxis(5)+1)/2) * 180 ) ) ) ;//change the 60 to 180
-      new JoystickButton(m_copilotController,7).whileTrue(new StartEndCommand(() -> m_ScoringArm.SuperLaunchSpeed(), () -> m_ScoringArm.CoastLaunchMotors()));
+      //new JoystickButton(m_copilotController,7).whileTrue(new StartEndCommand(() -> m_ScoringArm.SuperLaunchSpeed(), () -> m_ScoringArm.CoastLaunchMotors()));
+      new JoystickButton(m_copilotController,7).whileTrue(new StartEndCommand(() -> m_ScoringArm.EnableArmAngleControl(false), () -> m_ScoringArm.EnableArmAngleControl(true)));
       
       //new JoystickButton(m_copilotController, 11).onTrue(new InstantCommand(()-> m_ScoringArm.SetArmAngleToSDBValue()));
       //new JoystickButton(m_copilotController, 7).onTrue(new StaticLaunch(m_ScoringArm));
@@ -272,9 +275,9 @@ public class RobotContainer {
       // new JoystickButton(m_driverController, 4).onTrue(new InstantCommand( ()-> m_ScoringArm.UnlatchClimb() ) );
       //new JoystickButton(m_driverController, 3).onTrue(new InstantCommand( ()-> m_ScoringArm.SetFlap(true) ) );
       //new JoystickButton(m_driverController, 4).onTrue(new InstantCommand( ()-> m_ScoringArm.SetFlap(false) ) );
-      new JoystickButton(m_driverController, 3).whileTrue(new SpeakerVisionAim(drivebase, m_robotVision, m_driveStick,m_ScoringArm, m_signalLights));
+      new JoystickButton(m_driverController, 3).whileTrue(new SpeakerVisionAim(drivebase, m_robotVision, m_driveStick,m_ScoringArm, m_signalLights,false));
       new JoystickButton(m_driverController, 4).whileTrue(new VisionAim(drivebase, m_robotVision, m_driveStick, m_signalLights));
-      new JoystickButton(m_driverController, 2).whileTrue(new StaticLaunch(m_ScoringArm, 23, 250));
+      new JoystickButton(m_driverController, 2).whileTrue(new StaticLaunch(m_ScoringArm, 23, 250,false));
       new JoystickButton(m_driverController, 7).whileTrue(new DeathSpin(drivebase));
 
     }
@@ -292,6 +295,7 @@ public class RobotContainer {
     
     
     //signalLights.setDefaultCommand(new InstantCommand(()->signalLights.SetArmLEDBufferToCoolAnimation()));
+    
   }
 
   /**

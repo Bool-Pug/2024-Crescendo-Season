@@ -170,12 +170,13 @@ public class SwerveSubsystem extends SubsystemBase {
     PathPlannerPath path = PathPlannerPath.fromPathFile(autoName);
 
     if (setOdomToStart) {
-      // Get the initial pose with alliance switching
+      
+    }
+    // Get the initial pose with alliance switching
       Pose2d initialPose = path.getPreviewStartingHolonomicPose();
       //Pose2d initialPose = convertToRedSide(path.getPreviewStartingHolonomicPose()); No longer needed Pathplanner handles it
 
       resetOdometry(initialPose);
-    }
  
     // Create a path following command using AutoBuilder. This will also trigger
     // event markers.
