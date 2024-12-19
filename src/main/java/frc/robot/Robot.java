@@ -148,8 +148,7 @@ public class Robot extends TimedRobot {
 
   public void ResetArmSetpoints(){
     if(m_robotContainer.ROBOT_IN_USE.equals(Constants.ROBOT_SUPERSONIC_CONFIG_LOCATION)){
-      m_robotContainer.m_ScoringArm.resetSetpoints();
-
+        
     }
   }
 

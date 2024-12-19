@@ -18,7 +18,6 @@ public class SignalLights extends SubsystemBase {
   
   public AddressableLED armLEDs;
   public AddressableLEDBuffer armLEDBuffer = new AddressableLEDBuffer(LEDConstants.kArmLEDCount);
-  public ScoringArm scoringArm;
   public boolean visualizingIntakeSensor = false;
   public boolean idleAnimation = true;
   public Timer animationTimer = new Timer();
@@ -43,11 +42,10 @@ public class SignalLights extends SubsystemBase {
   }
 
   /** Creates a new SignalLights. */
-  public SignalLights(ScoringArm arm) {
+  public SignalLights() {
     armLEDs = new AddressableLED(LEDConstants.kArmLEDPort);
     animationTimer.start();
     animationCounter = 0;
-    scoringArm = arm;
     armLEDBuffer = new AddressableLEDBuffer(LEDConstants.kArmLEDCount);
     //SetArmLEDBufferToSolidColor(LEDConstants.kDatabitsColor);
     armLEDs.setLength(LEDConstants.kArmLEDCount);
@@ -71,7 +69,7 @@ public class SignalLights extends SubsystemBase {
     // This method will be called once per scheduler run
     switch (currentSignal) {
       case noteSignaling:
-        boolean hasNote = scoringArm.LowIntakeSensorBlocked();
+        boolean hasNote = true;
           if(hasNote != previousNoteState){
             if(hasNote){
               SetArmLEDBufferToSolidColor(LEDConstants.kHasNoteColor);
@@ -208,7 +206,7 @@ public class SignalLights extends SubsystemBase {
   }
 
   public void ResetNoteSignalState(){
-    previousNoteState = !scoringArm.LowIntakeSensorBlocked();
+    previousNoteState = false;
   }
 
 

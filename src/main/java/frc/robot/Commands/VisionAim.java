@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ScoringArmConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.FieldDriverStick;
-import frc.robot.subsystems.ScoringArm;
 import frc.robot.subsystems.SignalLights;
 import frc.robot.subsystems.SignalLights.LightSignal;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;

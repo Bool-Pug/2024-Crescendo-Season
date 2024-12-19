@@ -26,18 +26,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Commands.DeathSpin;
-import frc.robot.Commands.ManualArmControl;
-import frc.robot.Commands.OutakeNoteToLaunchPos;
-import frc.robot.Commands.RunIntakeSmart;
-import frc.robot.Commands.SpeakerVisionAim;
-import frc.robot.Commands.StaticLaunch;
 import frc.robot.Commands.VisionAim;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ScoringArmConstants;
 import frc.robot.subsystems.FieldDriverStick;
-import frc.robot.subsystems.ScoringArm;
 import frc.robot.subsystems.SignalLights;
 import frc.robot.subsystems.SignalLights.LightSignal;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -59,7 +53,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems
   
-  public final ScoringArm m_ScoringArm;
   //Long Claw
   //public final String ROBOT_IN_USE = Constants.ROBOT_LONGCLAW_CONFIG_LOCATION;
   //SuperSonic
@@ -128,15 +121,9 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     
-    if(ROBOT_IN_USE == Constants.ROBOT_SUPERSONIC_CONFIG_LOCATION){
-      m_ScoringArm = new ScoringArm();
-    }
-    else{
-      m_ScoringArm = null;
-    }
+  
 
-    m_signalLights = new SignalLights(m_ScoringArm);
-    m_ScoringArm.signalLights = m_signalLights;
+    m_signalLights = new SignalLights();
     
     configureAutoNamedCommands();
     m_autoChooser = AutoBuilder.buildAutoChooser();
@@ -178,10 +165,7 @@ public class RobotContainer {
   public void robotInit(){
     if(ROBOT_IN_USE == Constants.ROBOT_SUPERSONIC_CONFIG_LOCATION){
     Shuffleboard.getTab("Game HUD").addDouble("Robot Pitch", (()-> drivebase.getPitch().getDegrees())).withWidget(BuiltInWidgets.kDial);
-    Shuffleboard.getTab("Game HUD").addDouble("Arm Angle", m_ScoringArm::GetArmAngle);
-    Shuffleboard.getTab("Game HUD").addBoolean("Has Note", m_ScoringArm::HasNote).withSize(6, 6).withWidget(BuiltInWidgets.kBooleanBox);
-    Shuffleboard.getTab("Arm HUD").addBoolean("High Sensor", m_ScoringArm::HighIntakeSensorBlocked);
-    Shuffleboard.getTab("Arm HUD").addBoolean("Low Sensor", m_ScoringArm::LowIntakeSensorBlocked);
+    
     //Shuffleboard.getTab("Game HUD").add(autoChooser).withSize(2,1);
     }
 
@@ -195,12 +179,6 @@ public class RobotContainer {
 
   public void configureAutoNamedCommands(){
     if(ROBOT_IN_USE == Constants.ROBOT_SUPERSONIC_CONFIG_LOCATION){
-      NamedCommands.registerCommand("Outake Launch Prep", new OutakeNoteToLaunchPos(m_ScoringArm));
-      NamedCommands.registerCommand("Smart Intake", new RunIntakeSmart(m_ScoringArm,m_signalLights,true));
-      NamedCommands.registerCommand("Near Static Launch", new StaticLaunch(m_ScoringArm, ScoringArmConstants.kArmPosNearStaticLaunch, 250,false));
-      NamedCommands.registerCommand("Far Static Launch", new StaticLaunch(m_ScoringArm, 37 , 250,false));
-      NamedCommands.registerCommand("Vision Aim", new SpeakerVisionAim(drivebase, m_robotVision, m_driveStick, m_ScoringArm, m_signalLights,true));
-      NamedCommands.registerCommand("Arm Pickup Pos", new InstantCommand(() -> m_ScoringArm.SetArmAngle(ScoringArmConstants.kArmPosPickup)));
 
     }
     
@@ -252,23 +230,8 @@ public class RobotContainer {
 
     if (!ROBOT_IN_USE.equals(Constants.ROBOT_LONGCLAW_CONFIG_LOCATION))
     {
-      new Trigger(()-> m_driverController.getTrigger()).whileTrue(new StartEndCommand(() -> m_ScoringArm.Launch(), ()-> m_ScoringArm.StopIntake()));//
       
 
-      new JoystickButton(m_copilotController, 5).whileTrue(new RunIntakeSmart(m_ScoringArm,m_signalLights,false));
-      new JoystickButton(m_copilotController, 6).whileTrue(new StartEndCommand(() ->m_ScoringArm.Outtake() , () -> m_ScoringArm.StopIntake()));    
-      new JoystickButton(m_copilotController, 10).onTrue(new InstantCommand(() -> m_ScoringArm.PrepareClimb()));
-      new JoystickButton(m_copilotController, 9).onTrue(new InstantCommand(() -> m_ScoringArm.Climb()));
-      new JoystickButton(m_copilotController, 2).onTrue(new InstantCommand(() -> m_ScoringArm.SetArmAngle(ScoringArmConstants.kArmPosNearStaticLaunch)));
-      new JoystickButton(m_copilotController, 1).onTrue(new InstantCommand(() -> m_ScoringArm.SetArmAngle(ScoringArmConstants.kArmPosFarStaticLaunch)));
-      new JoystickButton(m_copilotController, 3).whileTrue((new StartEndCommand(() -> m_ScoringArm.AmpPreparation(), () -> m_ScoringArm.CoastLaunchMotors())));
-      new JoystickButton(m_copilotController, 4).onTrue(new InstantCommand(() -> m_ScoringArm.SetArmAngle(ScoringArmConstants.kArmPosPickup)));
-      new Trigger(() -> (m_copilotController.getRawAxis(3) > 0.5)).whileTrue(new StartEndCommand(() -> m_ScoringArm.SetLaunchSpeedWithOutake(250), () -> m_ScoringArm.CoastLaunchMotors()));
-      //fix the launch speed
-      new Trigger(() -> (m_copilotController.getRawAxis(2) > 0.5)).whileTrue(new StartEndCommand(() -> m_ScoringArm.Launch(), ()-> m_ScoringArm.StopIntake()));//
-      new JoystickButton(m_copilotController, 8).whileTrue(new ManualArmControl(m_ScoringArm, ()-> ((( -m_copilotController.getRawAxis(5)+1)/2) * 180 ) ) ) ;//change the 60 to 180
-      //new JoystickButton(m_copilotController,7).whileTrue(new StartEndCommand(() -> m_ScoringArm.SuperLaunchSpeed(), () -> m_ScoringArm.CoastLaunchMotors()));
-      new JoystickButton(m_copilotController,7).whileTrue(new StartEndCommand(() -> m_ScoringArm.EnableArmAngleControl(false), () -> m_ScoringArm.EnableArmAngleControl(true)));
       
       //new JoystickButton(m_copilotController, 11).onTrue(new InstantCommand(()-> m_ScoringArm.SetArmAngleToSDBValue()));
       //new JoystickButton(m_copilotController, 7).onTrue(new StaticLaunch(m_ScoringArm));
@@ -277,9 +240,7 @@ public class RobotContainer {
       // new JoystickButton(m_driverController, 4).onTrue(new InstantCommand( ()-> m_ScoringArm.UnlatchClimb() ) );
       //new JoystickButton(m_driverController, 3).onTrue(new InstantCommand( ()-> m_ScoringArm.SetFlap(true) ) );
       //new JoystickButton(m_driverController, 4).onTrue(new InstantCommand( ()-> m_ScoringArm.SetFlap(false) ) );
-      new JoystickButton(m_driverController, 3).whileTrue(new SpeakerVisionAim(drivebase, m_robotVision, m_driveStick,m_ScoringArm, m_signalLights,false));
       new JoystickButton(m_driverController, 4).whileTrue(new VisionAim(drivebase, m_robotVision, m_driveStick, m_signalLights));
-      new JoystickButton(m_driverController, 2).whileTrue(new StaticLaunch(m_ScoringArm, 23, 250,false));
       new JoystickButton(m_driverController, 7).whileTrue(new DeathSpin(drivebase));
 
     }
